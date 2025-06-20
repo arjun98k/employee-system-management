@@ -1,0 +1,150 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Employee"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#4CAF50"
+            android:paddingBottom="16dp" />
+
+        <!-- First Name -->
+        <EditText
+            android:id="@+id/firstName"
+            android:hint="First Name*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/firstNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="First Name is required"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Middle Name -->
+        <EditText
+            android:id="@+id/middleName"
+            android:hint="Middle Name*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/middleNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Middle Name is required"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Last Name -->
+        <EditText
+            android:id="@+id/lastName"
+            android:hint="Last Name*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/lastNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Last Name is required"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Phone -->
+        <EditText
+            android:id="@+id/phone"
+            android:hint="+91XXXXXXXX86*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/phoneError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phone number must be 10 digits"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Email -->
+        <EditText
+            android:id="@+id/email"
+            android:hint="Email ID*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress" />
+
+        <TextView
+            android:id="@+id/emailError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Invalid email address"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Department -->
+        <EditText
+            android:id="@+id/department"
+            android:hint="Department*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/departmentError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Department is required"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Designation -->
+        <EditText
+            android:id="@+id/designation"
+            android:hint="Designation*"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/designationError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Designation is required"
+            android:textColor="#F44336"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/saveButton"
+            android:text="SAVE"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#4CAF50"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="24dp" />
+
+    </LinearLayout>
+</ScrollView>
