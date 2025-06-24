@@ -1,6 +1,10 @@
 package com.example.akash_task
-
+import com.example.akash_task.SimpleTextWatcher
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.Spanned
+import android.text.TextWatcher
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +20,6 @@ class NewEmployeeActivity : AppCompatActivity() {
     private lateinit var designation: EditText
     private lateinit var saveButton: Button
 
-    // Error TextViews
     private lateinit var firstNameError: TextView
     private lateinit var middleNameError: TextView
     private lateinit var lastNameError: TextView
@@ -39,7 +42,7 @@ class NewEmployeeActivity : AppCompatActivity() {
         designation = findViewById(R.id.designation)
         saveButton = findViewById(R.id.saveButton)
 
-        // Error Labels
+        // Error TextViews
         firstNameError = findViewById(R.id.firstNameError)
         middleNameError = findViewById(R.id.middleNameError)
         lastNameError = findViewById(R.id.lastNameError)
@@ -47,6 +50,12 @@ class NewEmployeeActivity : AppCompatActivity() {
         emailError = findViewById(R.id.emailError)
         departmentError = findViewById(R.id.departmentError)
         designationError = findViewById(R.id.designationError)
+
+        // Set input limit to 10 digits for phone number
+        phone.filters = arrayOf(InputFilter.LengthFilter(10), PhoneNumberFilter())
+
+        // Real-time validation
+        addTextWatchers()
 
         saveButton.setOnClickListener {
             if (validateInput()) {
@@ -69,7 +78,11 @@ class NewEmployeeActivity : AppCompatActivity() {
     private fun validateInput(): Boolean {
         var isValid = true
 
-        // Hide all error labels first
+        fun showError(view: TextView, message: String) {
+            view.text = message
+            view.visibility = View.VISIBLE
+        }
+
         firstNameError.visibility = View.GONE
         middleNameError.visibility = View.GONE
         lastNameError.visibility = View.GONE
@@ -79,42 +92,76 @@ class NewEmployeeActivity : AppCompatActivity() {
         designationError.visibility = View.GONE
 
         if (firstName.text.isBlank()) {
-            firstNameError.visibility = View.VISIBLE
+            showError(firstNameError, "First name required")
             isValid = false
         }
 
         if (middleName.text.isBlank()) {
-            middleNameError.visibility = View.VISIBLE
+            showError(middleNameError, "Middle name required")
             isValid = false
         }
 
         if (lastName.text.isBlank()) {
-            lastNameError.visibility = View.VISIBLE
+            showError(lastNameError, "Last name required")
             isValid = false
         }
 
-        if (phone.text.length != 10) {
-            phoneError.text = "Phone number must be 10 digits"
-            phoneError.visibility = View.VISIBLE
+        val phoneValue = phone.text.toString()
+        if (phoneValue.length != 10 || phoneValue[0] in '0'..'4') {
+            showError(phoneError, "Phone must be 10 digits and not start with 0-4")
             isValid = false
         }
 
         if (!email.text.contains("@")) {
-            emailError.text = "Invalid email address"
-            emailError.visibility = View.VISIBLE
+            showError(emailError, "Invalid email format")
             isValid = false
         }
 
         if (department.text.isBlank()) {
-            departmentError.visibility = View.VISIBLE
+            showError(departmentError, "Department required")
             isValid = false
         }
 
         if (designation.text.isBlank()) {
-            designationError.visibility = View.VISIBLE
+            showError(designationError, "Designation required")
             isValid = false
         }
 
         return isValid
     }
+    class PhoneNumberFilter : InputFilter {
+        override fun filter(
+            source: CharSequence?, start: Int, end: Int,
+            dest: Spanned?, dstart: Int, dend: Int
+        ): CharSequence? {
+            val result = (dest?.toString() ?: "") + (source?.toString() ?: "")
+
+            // Block if first digit is 0-4
+            if (result.length == 1 && result[0] in '0'..'4') {
+                return ""
+            }
+
+            // Limit to only digits
+            if (source != null && source.any { !it.isDigit() }) {
+                return ""
+            }
+
+            return null // Accept input
+        }
+    }
+
+
+    private fun addTextWatchers() {
+        firstName.liveValidate(firstNameError, "First name required") { it.isNotBlank() }
+        middleName.liveValidate(middleNameError, "Middle name required") { it.isNotBlank() }
+        lastName.liveValidate(lastNameError, "Last name required") { it.isNotBlank() }
+        phone.liveValidate(phoneError, "Must be 10 digits and not start with 0-4") {
+            it.length == 10 && it[0] !in '0'..'4'
+        }
+        email.liveValidate(emailError, "Invalid email format") { it.contains("@") }
+        department.liveValidate(departmentError, "Department required") { it.isNotBlank() }
+        designation.liveValidate(designationError, "Designation required") { it.isNotBlank() }
+    }
+
+
 }

@@ -3,7 +3,7 @@ import io.grpc.InternalChannelz.id
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("org.jetbrains.kotlin.kapt") // ✅ use id instead of alias here
+
 }
 
 android {
@@ -44,13 +44,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.activity:activity-ktx:1.8.2")
-    implementation("androidx.room:room-ktx:2.7.2")
 
-    kapt("androidx.room:room-compiler:2.7.2")
-
-
-// Optional: if you plan to use coroutines
-    implementation("androidx.room:room-ktx:1.9.22")
 
 
     implementation(libs.androidx.constraintlayout)
