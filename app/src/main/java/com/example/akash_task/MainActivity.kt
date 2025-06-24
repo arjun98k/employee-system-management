@@ -1,5 +1,4 @@
 package com.example.akash_task
-import com.example.akash_task.EmployeeRepository
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +10,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         totalText = findViewById(R.id.totalEmployees)
-        container = findViewById(R.id.employeeListContainer) // <== Add android:id="employeeListContainer" to your XML
+        container = findViewById(R.id.employeeListContainer)
         fabAdd = findViewById(R.id.fabAddEmployee)
 
         fabAdd.setOnClickListener {
@@ -56,19 +58,34 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshList() {
         container.removeAllViews()
-        val employees = EmployeeRepository.getAllEmployees()
-        totalText.text = "Total Employees: ${employees.size}"
-        for (emp in employees) {
-            val view = layoutInflater.inflate(R.layout.item_employee_card, container, false)
 
-            view.findViewById<TextView>(R.id.empName).text = emp.fullName()
-            view.findViewById<TextView>(R.id.empPhone).text = emp.phone
-            view.findViewById<TextView>(R.id.empEmail).text = emp.email
-            view.findViewById<TextView>(R.id.empId).text = (1000..9999).random().toString()
-            view.findViewById<TextView>(R.id.empRole).text = emp.designation
-            view.findViewById<TextView>(R.id.empDept).text = emp.department
+        lifecycleScope.launch {
+            val employees = withContext(Dispatchers.IO) {
+                RoomEmployeeRepository(this@MainActivity).getAllEmployees()
+            }
 
-            container.addView(view)
+            totalText.text = "Total Employees: ${employees.size}"
+
+            for (emp in employees) {
+                val view = layoutInflater.inflate(R.layout.item_employee_card, container, false)
+
+                view.findViewById<TextView>(R.id.empName).text =
+                    "${emp.firstName} ${emp.middleName} ${emp.lastName}"
+                view.findViewById<TextView>(R.id.empPhone).text = emp.phone
+                view.findViewById<TextView>(R.id.empEmail).text = emp.email
+                view.findViewById<TextView>(R.id.empId).text = emp.id.toString()
+                view.findViewById<TextView>(R.id.empRole).text = emp.designation
+                view.findViewById<TextView>(R.id.empDept).text = emp.department
+
+                // 🔥 Enable clicking to edit
+                view.setOnClickListener {
+                    val intent = Intent(this@MainActivity, NewEmployeeActivity::class.java)
+                    intent.putExtra("employee_id", emp.id)
+                    startActivity(intent)
+                }
+
+                container.addView(view)
+            }
         }
     }
 }

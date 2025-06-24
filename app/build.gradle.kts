@@ -1,8 +1,9 @@
-import io.grpc.InternalChannelz.id
+
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
 
 }
 
@@ -39,6 +40,17 @@ android {
 }
 
 dependencies {
+
+    // Room Core
+    implementation("androidx.room:room-runtime:2.6.1")
+
+// Room Compiler (must use kapt!)
+    kapt("androidx.room:room-compiler:2.6.1")
+
+
+// Room Kotlin Extensions & Coroutines
+    implementation("androidx.room:room-ktx:2.6.1")
+
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
